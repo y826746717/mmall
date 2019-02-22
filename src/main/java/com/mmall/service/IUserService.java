@@ -1,4 +1,4 @@
-package com.mmall.service.IUserService.impl;
+package com.mmall.service;
 
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
@@ -25,4 +25,6 @@ public interface IUserService {
     public ServerResponse<User> updateInformation(User user);
 
     public ServerResponse<User> getInformation(int userId);
+
+    public ServerResponse checkRoleAdmin(User user);
 }

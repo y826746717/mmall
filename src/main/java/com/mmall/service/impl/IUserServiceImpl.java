@@ -1,16 +1,16 @@
-package com.mmall.service.IUserService.impl;
+package com.mmall.service.impl;
 
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
 import com.mmall.common.TokenCache;
 import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
+import com.mmall.service.IUserService;
 import com.mmall.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 /**
@@ -232,5 +232,17 @@ public class IUserServiceImpl implements IUserService {
         }
         user.setPassword(StringUtils.EMPTY);
         return  ServerResponse.createBySuccess(user);
+    }
+
+    /**
+     * 校验当前登陆用户是否是管理员
+     * @param user
+     * @return
+     */
+    public ServerResponse checkRoleAdmin(User user){
+        if(user!=null && user.getRole().intValue() == Const.Role.ROLE_ADMIN){
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByError();
     }
 }
