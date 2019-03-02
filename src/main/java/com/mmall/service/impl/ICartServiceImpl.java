@@ -26,7 +26,7 @@ import java.util.List;
  * Created by YangYang on 2019/2/25.
  */
 @Service("iCartService")
-public class CartServiceImpl implements ICartService {
+public class ICartServiceImpl implements ICartService {
 
     @Autowired
     private CartMapper cartMapper;
@@ -54,8 +54,10 @@ public class CartServiceImpl implements ICartService {
             cart.setQuantity(count);
             cartMapper.updateByPrimaryKeySelective(cart);
         }
-        CartVo cartVo = this.getCartVoLimit(userId);
-        return ServerResponse.createBySuccess(cartVo);
+        //体现封装思想的关键代码，注释吊这俩句话，可以用list方法
+//        CartVo cartVo = this.getCartVoLimit(userId);
+//        return ServerResponse.createBySuccess(cartVo);
+        return  this.list(userId);
     }
 
 
@@ -69,8 +71,10 @@ public class CartServiceImpl implements ICartService {
             cart.setQuantity(count);
         }
         cartMapper.updateByPrimaryKeySelective(cart);
-        CartVo cartVo = this.getCartVoLimit(userId);
-        return ServerResponse.createBySuccess(cartVo);
+        //体现封装思想的关键代码，注释吊这俩句话，可以用list方法
+//        CartVo cartVo = this.getCartVoLimit(userId);
+//        return ServerResponse.createBySuccess(cartVo);
+        return  this.list(userId);
     }
 
     public ServerResponse<CartVo> deleteProduct(Integer userId,String productIds){
@@ -80,8 +84,10 @@ public class CartServiceImpl implements ICartService {
                     ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }else{
             cartMapper.deleteByUserIDAndProductIds(userId,productList);
-            CartVo cartVo = this.getCartVoLimit(userId);
-            return ServerResponse.createBySuccess(cartVo);
+            //体现封装思想的关键代码，注释吊这俩句话，可以用list方法
+//            CartVo cartVo = this.getCartVoLimit(userId);
+//            return ServerResponse.createBySuccess(cartVo);
+            return  this.list(userId);
         }
     }
 
@@ -153,5 +159,18 @@ public class CartServiceImpl implements ICartService {
         }
         int count = cartMapper.selectCartProductCheckedStatusByUserId(userId);
         return count == 0;
+    }
+
+    //全选或者全反选或单选或者取消单选
+    public ServerResponse<CartVo> checkedOrUnchecked(Integer userId,Integer productId,Integer checked){
+        int count = cartMapper.checkedOrUnchecked(userId, productId,checked);
+        return  this.list(userId);
+    }
+
+    public ServerResponse<Integer> getCartProductCount(Integer userId){
+        if(userId==null){
+            return ServerResponse.createBySuccess(0);
+        }
+        return ServerResponse.createBySuccess(cartMapper.getCartProductCount(userId));
     }
 }

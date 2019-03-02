@@ -1,7 +1,7 @@
 package com.mmall.dao;
 
 import com.mmall.pojo.Cart;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,13 +18,16 @@ public interface CartMapper {
 
     int updateByPrimaryKey(Cart record);
 
-    Cart getUserIdAndProductId(@RequestParam("userId") Integer userId,@RequestParam("productId") Integer productId);
+    Cart getUserIdAndProductId(@Param("userId") Integer userId,@Param("productId") Integer productId);
 
     List<Cart> getCartByUserId(Integer userId);
 
     int selectCartProductCheckedStatusByUserId(Integer userId);
 
-    int deleteByUserIDAndProductIds(@RequestParam("userId") Integer userId,
-                                    @RequestParam("productList") List<String> productList );
+    int deleteByUserIDAndProductIds(@Param("userId") Integer userId,
+                                    @Param("productList") List<String> productList );
 
+    int checkedOrUnchecked(@Param("userId") Integer userId,@Param("productId") Integer productId ,@Param("checked") Integer checked);
+
+    int getCartProductCount(@Param("userId") Integer userId);
 }
