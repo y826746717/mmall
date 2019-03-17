@@ -139,8 +139,10 @@ public class ICartServiceImpl implements ICartService {
                     cartProductVo.setProductTotalPrice(BigDecimalUtil.mul(product.getPrice().doubleValue(),cartProductVo.getQuantity()));
                     cartProductVo.setProductChecked(cart.getChecked());
                     //计算当前购物车的总价,如果已经勾选，就增加到购物车的总价中
-                    cartTotalPrice = BigDecimalUtil.add(cartTotalPrice.doubleValue(),
-                            cartProductVo.getProductTotalPrice().doubleValue());
+                    if(cart.getChecked()==Const.Cart.CHECKED) {
+                        cartTotalPrice = BigDecimalUtil.add(cartTotalPrice.doubleValue(),
+                                cartProductVo.getProductTotalPrice().doubleValue());
+                    }
 
                 }
                 cartProductVoList.add(cartProductVo);
